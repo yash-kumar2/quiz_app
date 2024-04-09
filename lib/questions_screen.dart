@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/answer_button.dart';
+import 'package:quiz_app/data/questions.dart';
 class QuestionsScreen extends StatefulWidget{
   const QuestionsScreen({super.key});
   @override
@@ -8,32 +9,38 @@ class QuestionsScreen extends StatefulWidget{
   }
 }
 class _QuestionsScreenState extends State<QuestionsScreen>{
+  var currentQuestionIndex=0;
+  void answerQuestion(){
+    setState(() {currentQuestionIndex++;});
+     
+  }
+
   @override
   Widget build(context){
+    final currentQuestion=questions[currentQuestionIndex];
+
     return SizedBox(
       width:double.infinity,
-       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children:[
-          const Text('Questipns',
-          style: TextStyle(
-            color: Colors.white,
-          ),),
-          const SizedBox(height: 30),
-          AnswerButton(answerText: "answer 1",
-           onTap: (){},
-           ),
-           AnswerButton(answerText: "answer 2",
-           onTap: (){},
-           ),
-           AnswerButton(answerText: "answer 3",
-           onTap: (){},
-           ),
-           AnswerButton(answerText: "answer 4",
-           onTap: (){},
-           ),
-        ]
-      ),
+       child: Container(
+        margin: EdgeInsets.all(40),
+         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children:[
+            Text(currentQuestion.text,
+            style: TextStyle(
+              color:  Colors.white,
+            ),
+            textAlign: TextAlign.center,),
+            const SizedBox(height: 30),
+            ...currentQuestion.getShuffledAnswers().map((answer){
+              return AnswerButton(answerText: answer, onTap: answerQuestion);
+            }),
+           
+             
+          ]
+               ),
+       ),
     );
   }
 }
